@@ -30,6 +30,8 @@ public class Test extends BaseTest implements TestData {
         for (UserCard userCard : listOfUsers) {
             Assert.assertTrue(names.contains(userCard.getName()));
         }
+
+        listOfUsers.get(0).getMessageButton().get(0).click();
     }
 
     @After
