@@ -32,10 +32,11 @@ public class LoginPage {
         return enter;
     }
 
-    public void loginMe(String login, String password) {
+    public WebDriver loginMe(WebDriver driver,String login, String password) {
         getLogin().sendKeys(login);
         getPassword().sendKeys(password);
         enter.click();
+        return driver;
     }
 
     @FindBy(id = "field_email")

@@ -10,7 +10,7 @@ public abstract class BaseTest {
     WebDriver driver;
 
     public void setup() {
-        System.setProperty("webdriver.chrome.driver", "/home/robert/IdeaProjects/AutoTestPolis/ChromeDriver/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver2.exe");
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
