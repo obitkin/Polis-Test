@@ -1,41 +1,56 @@
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.openqa.selenium.WebElement;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.function.Executable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Test extends BaseTest implements TestData {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+
+public class Test implements TestData {
 
     LoginPage loginPage;
 
-    @Before
-    public void begin() {
-        setup();
-        loginPage = new LoginPage(driver);
-        loginPage.open();
-    }
-
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void MyTest() {
-        UserPage userPage = loginPage.loginMe(login, password);
-        Assert.assertEquals(userPage.getCurrentUrl(), userPageURL);
+        loginPage = new LoginPage();
 
+        //Логинимся
+        UserPage userPage = loginPage.loginMe(login, password);
+
+        //Кликаем на "Гостей" в туллбаре
         GuestPage guestPage = userPage.goToGuest();
+
+        //Получаем список гостей
         List<UserCard> listOfUsers = guestPage.getGuestCard();
 
-        Assert.assertEquals(names.size(), listOfUsers.size());
-        listOfUsers.forEach(x -> System.out.println(x.getName()));
+        //Проверяем что размер одинаков
+        assertEquals(namesFromTest.size(), listOfUsers.size());
 
-        for (UserCard userCard : listOfUsers) {
-            Assert.assertTrue(names.contains(userCard.getName()));
+        //Просто вывод имен для отладки
+        //listOfUsers.forEach(x -> System.out.println(x.getName()));
+
+        //Проверяем что каждое имя из тестовых данных содержится на странице
+        //Тут бы пригодился SoftAssert из TestNG, чтобы не падать на первом отсутствующем имени
+        //Но если делать через AssertAll то прикольно
+        List<Executable> assertionsForNames = new ArrayList<>();
+        final List<String> namesFromPage = listOfUsers.stream()
+                            .map(UserCard::getName)
+                            .collect(Collectors.toList());
+
+        for (String nameTest : namesFromTest) {
+            assertionsForNames.add(
+                    () -> assertTrue(
+                            namesFromPage.contains(nameTest),
+                            "Имя " + nameTest + " не найдено на странице"));
         }
+        Assertions.assertAll(assertionsForNames);
 
-        listOfUsers.get(0).getMessageButton().get(0).click();
-    }
-
-    @After
-    public void end() {
-        quit();
+        //Просто клик на шару
+        listOfUsers.get(0).getMessageButton().click();
     }
 }

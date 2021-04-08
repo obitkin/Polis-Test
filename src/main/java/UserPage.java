@@ -1,32 +1,19 @@
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import com.codeborne.selenide.ElementsCollection;
+import org.openqa.selenium.By;
 
-import java.util.List;
+import static com.codeborne.selenide.Selenide.$$;
 
 public class UserPage {
 
-    WebDriver driver;
+    private ElementsCollection toolbar = $$(By.xpath("//ul[@class=\"toolbar_nav\"]/li"));
 
-    public UserPage(WebDriver driver) {
-        PageFactory.initElements(driver,this);
-        this.driver = driver;
-    }
-
-    private List<WebElement> getToolbars() {
-        return toolbars;
+    private ElementsCollection getToolbars() {
+        return toolbar;
     }
 
     public GuestPage goToGuest() {
+        //Надо исправить клик с 4 на String
         getToolbars().get(4).click();
-        return new GuestPage(driver);
+        return new GuestPage();
     }
-
-    public String getCurrentUrl() {
-        return driver.getCurrentUrl();
-    }
-
-    @FindBy(xpath = "//ul[@class=\"toolbar_nav\"]/li")
-    List<WebElement> toolbars;
 }

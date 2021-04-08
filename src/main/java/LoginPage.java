@@ -1,50 +1,37 @@
+import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 
 public class LoginPage {
 
     String baseUrl = "https://ok.ru/";
 
-    WebDriver driver;
+    private SelenideElement login = $(By.id("field_email"));
+    private SelenideElement password = $(By.id("field_password"));
+    private SelenideElement enter = $(By.xpath("//input[@value='Войти в Одноклассники']"));
 
-    public LoginPage(WebDriver driver) {
-        PageFactory.initElements(driver,this);
-        this.driver = driver;
+    public LoginPage() {
+        open(baseUrl);
     }
 
-    public void open() {
-        driver.get(baseUrl);
-        driver.manage().window().maximize();
-    }
-
-    public WebElement getLogin() {
+    public SelenideElement getLogin() {
         return login;
     }
 
-    public WebElement getPassword() {
+    public SelenideElement getPassword() {
         return password;
     }
 
-    public WebElement getEnter() {
+    public SelenideElement getEnter() {
         return enter;
     }
 
     public UserPage loginMe(String login, String password) {
-        getLogin().sendKeys(login);
-        getPassword().sendKeys(password);
-        enter.click();
-        return new UserPage(driver);
+        getLogin().setValue(login);
+        getPassword().setValue(password);
+        getEnter().click();
+        return new UserPage();
     }
-
-    @FindBy(id = "field_email")
-    WebElement login;
-
-    @FindBy(id = "field_password")
-    WebElement password;
-
-    @FindBy(xpath = "//input[@value='Войти в Одноклассники']")
-    WebElement enter;
 }

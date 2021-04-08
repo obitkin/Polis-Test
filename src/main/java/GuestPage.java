@@ -1,28 +1,26 @@
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-
+import com.codeborne.selenide.*;
+import org.openqa.selenium.By;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.codeborne.selenide.Selenide.$$;
 
 public class GuestPage {
 
-    WebDriver driver;
-
-    public GuestPage(WebDriver driver) {
-        PageFactory.initElements(driver,this);
-        this.driver = driver;
-    }
+    private final ElementsCollection guestCards = $$(By.xpath("//div[@class=\"portlet_b\"]/.//div[@class=\"user-grid-card\"]"));
 
     public List<UserCard> getGuestCard() {
-        return portrets.stream().map(UserCard::new).collect(Collectors.toList());
+        List<UserCard> res = new ArrayList<>();
+        /**
+         * Нижная строка пресдтавляет собой выход логики теста в класс POM
+         * Эту архитектуру можно улучшить
+         * Вроде предлагалось в UserCard добавить статический метод получения листа карт гостей
+         * И там сделать проверку на появление этих карт/страницы гостей
+         */
+        guestCards.shouldBe(CollectionCondition.sizeGreaterThan(1));
+        for (SelenideElement s : guestCards) {
+            res.add(new UserCard(s));
+        }
+        return res;
     }
-
-    @FindBy(xpath = "//ul[@class=\"toolbar_nav\"]/li")
-    List<WebElement> toolbars;
-
-
-    @FindBy(xpath = "//div[@class=\"portlet_b\"]/.//div[@class=\"user-grid-card\"]")
-    List<WebElement> portrets;
 }
