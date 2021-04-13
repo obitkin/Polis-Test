@@ -1,16 +1,17 @@
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selectors.byId;
+import static com.codeborne.selenide.Selectors.byXpath;
 
 public class LoginPage {
 
     String baseUrl = "https://ok.ru/";
 
-    private SelenideElement login = $(By.id("field_email"));
-    private SelenideElement password = $(By.id("field_password"));
-    private SelenideElement enter = $(By.xpath("//input[@value='Войти в Одноклассники']"));
+    private SelenideElement login = $(byId("field_email"));
+    private SelenideElement password = $(byId("field_password"));
+    private SelenideElement enter = $(byXpath("//input[@value='Войти в Одноклассники']"));
 
     public LoginPage() {
         open(baseUrl);

@@ -1,13 +1,13 @@
 import com.codeborne.selenide.ElementsCollection;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selectors.byXpath;
 
 public class UserPage {
 
-    private ElementsCollection toolbar = $$(By.xpath("//ul[@class=\"toolbar_nav\"]/li"));
+    private final ElementsCollection toolbar = $$(byXpath("//ul[@class=\"toolbar_nav\"]/li"));
 
     private ElementsCollection getToolbars() {
         return toolbar;
@@ -26,7 +26,7 @@ public class UserPage {
     }
 
     // Функция поиска кнопки выхода из аккаунта
-    public WebElement logOut(String xpath) {
-        return $(By.xpath(xpath));
+    public SelenideElement logOut(String xpath) {
+        return $(byXpath(xpath));
     }
 }

@@ -1,15 +1,15 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 import java.util.List;
 
+import static com.codeborne.selenide.Selectors.byXpath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.codeborne.selenide.Selenide.$;
 
 public class TestMessages implements TestMessagesData {
     static LoginPage login;
-    WebDriverWait wait;
 
     @org.junit.jupiter.api.BeforeAll
     public static void Start() {
@@ -23,35 +23,33 @@ public class TestMessages implements TestMessagesData {
         // Переходим в "Сообщения" в Toolbar
         MessagePage msg1 = userPage1.goToMessage();
         // Ожидаем прогрузку вкладки "Сообщения" (теневой DOM)
-        wait = new WebDriverWait(WebDriverRunner.getWebDriver(), 10);
-        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath(messageLayer), 0));
+        $(byXpath(messageLayer)).shouldBe(Condition.appear, Duration.ofSeconds(10));
         // Получаем нужного адресата
-        WebElement msg1To = msg1.getWebElementFromShadowDom(user2Dialog);
+        SelenideElement msg1To = msg1.getWebElementFromShadowDom(user2Dialog);
         msg1To.click();
         // Нажимаем на кнопку со смайликами
-        WebElement smileBut = msg1.getWebElementFromShadowDom(smileMessageButton);
+        SelenideElement smileBut = msg1.getWebElementFromShadowDom(smileMessageButton);
         smileBut.click();
         // Выбираем отправку смайликов
-        WebElement smileBar = msg1.getWebElementFromShadowDom(smileLableButton);
+        SelenideElement smileBar = msg1.getWebElementFromShadowDom(smileLableButton);
         smileBar.click();
         // Кликаем по выбранному смайлику (smileCnt) раз
-        WebElement smileIcon = msg1.getWebElementFromShadowDom(smileIconButton);
+        SelenideElement smileIcon = msg1.getWebElementFromShadowDom(smileIconButton);
         for (int i = 0; i < smileCnt; i++)
         {
             smileIcon.click();
         }
-        smileIcon.getText();
         // Отправляем сообщение со смайликами
-        WebElement send = msg1.getWebElementFromShadowDom(sendSmilesButton);
+        SelenideElement send = msg1.getWebElementFromShadowDom(sendSmilesButton);
         send.click();
         // Нажимаем на кнопку выхода из системы
-        WebElement logOutBut = userPage1.logOut(logOutButton);
+        SelenideElement logOutBut = userPage1.logOut(logOutButton);
         logOutBut.click();
         // Выходим из системы
-        WebElement logOut = userPage1.logOut(logOutClick);
+        SelenideElement logOut = userPage1.logOut(logOutClick);
         logOut.click();
         // Подтверждаем выход из системы
-        WebElement acceptLogOut = userPage1.logOut(acceptLogOutClick);
+        SelenideElement acceptLogOut = userPage1.logOut(acceptLogOutClick);
         acceptLogOut.click();
 
 
@@ -60,17 +58,16 @@ public class TestMessages implements TestMessagesData {
         // Переходим в "Сообщения" в Toolbar
         MessagePage msg2 = userPage2.goToMessage();
         // Ожидаем прогрузку вкладки "Сообщения" (теневой DOM)
-        wait = new WebDriverWait(WebDriverRunner.getWebDriver(), 10);
-        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath(messageLayer), 0));
+        $(byXpath(messageLayer)).shouldBe(Condition.appear, Duration.ofSeconds(10));
         // Получаем нужного адресата
-        WebElement msg2To = msg2.getWebElementFromShadowDom(user1Dialog);
+        SelenideElement msg2To = msg2.getWebElementFromShadowDom(user1Dialog);
         msg2To.click();
         // Получаем список сообщений в диалоге
-        List<WebElement> messages = msg2.getWebElementsFromShadowDom(getMessages);
+        List<SelenideElement> messages = msg2.getWebElementsFromShadowDom(getMessages);
         // Выбираем последнее сообщение
-        WebElement lastMessage = messages.get(messages.size() - 1);
+        SelenideElement lastMessage = messages.get(messages.size() - 1);
         // Получаем список элементов внутри последнего сообщения
-        List<WebElement> lastMessageElements = lastMessage.findElements(By.xpath(elementsMessages));
+        List<SelenideElement> lastMessageElements = lastMessage.$$(byXpath(elementsMessages));
         // Сравниваем кол-во элементов в полученном и отправленном сообщениях
         assertEquals(lastMessageElements.size(), smileCnt);
         // Сравниваем полученное и отправленное сообщения поэлементно
@@ -78,8 +75,6 @@ public class TestMessages implements TestMessagesData {
         {
             assertEquals(lastMessageElements.get(i).getAttribute("alt"), smile);
         }
-
-        //WebElement writeMsg = msg1.sendMessage(".//msg-input[@data-placeholder='Напишите сообщение...']");
     }
 
     @org.junit.jupiter.api.AfterAll

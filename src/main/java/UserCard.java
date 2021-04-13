@@ -1,5 +1,6 @@
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
+
+import static com.codeborne.selenide.Selectors.byClassName;
 
 public class UserCard {
 
@@ -10,10 +11,10 @@ public class UserCard {
     }
 
     public String getName() {
-        return root.find(By.className("ellip")).getText();
+        return root.find(byClassName("ellip")).getText();
     }
 
     public SelenideElement getMessageButton() {
-        return root.find(By.className("tico"));
+        return root.find(byClassName("tico"));
     }
 }
