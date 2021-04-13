@@ -43,14 +43,14 @@ public class TestMessages implements TestMessagesData {
         SelenideElement send = msg1.getWebElementFromShadowDom(sendSmilesButton);
         send.click();
         // Нажимаем на кнопку выхода из системы
-        SelenideElement logOutBut = userPage1.logOut(logOutButton);
-        logOutBut.click();
+        SelenideElement logOutBut1 = userPage1.logOut(logOutButton);
+        logOutBut1.click();
         // Выходим из системы
-        SelenideElement logOut = userPage1.logOut(logOutClick);
-        logOut.click();
+        SelenideElement logOut1 = userPage1.logOut(logOutClick);
+        logOut1.click();
         // Подтверждаем выход из системы
-        SelenideElement acceptLogOut = userPage1.logOut(acceptLogOutClick);
-        acceptLogOut.click();
+        SelenideElement acceptLogOut1 = userPage1.logOut(acceptLogOutClick);
+        acceptLogOut1.click();
 
 
         // Логинимся вторым ботом
@@ -75,6 +75,15 @@ public class TestMessages implements TestMessagesData {
         {
             assertEquals(lastMessageElements.get(i).getAttribute("alt"), smile);
         }
+        // Нажимаем на кнопку выхода из системы
+        SelenideElement logOutBut2 = userPage1.logOut(logOutButton);
+        logOutBut2.click();
+        // Выходим из системы
+        SelenideElement logOut2 = userPage1.logOut(logOutClick);
+        logOut2.click();
+        // Подтверждаем выход из системы
+        SelenideElement acceptLogOut2 = userPage1.logOut(acceptLogOutClick);
+        acceptLogOut2.click();
     }
 
     @org.junit.jupiter.api.AfterAll
