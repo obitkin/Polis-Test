@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class ToolbarRight {
 
-    private final SelenideElement root = $("div.toolbar_dropdown");
+    private final SelenideElement root = $("div.toolbar_dropdown_w");
 
     public SelenideElement getToolbarRight() {
         return root;
