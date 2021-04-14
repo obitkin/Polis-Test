@@ -1,14 +1,18 @@
-package ru.polis.toasters.pages;
+package ru.polis.toasters.elements;
 
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selectors.byClassName;
 
-public class UserCard {
+public class GuestCard {
 
     SelenideElement root;
 
-    public UserCard(SelenideElement root) {
+    public SelenideElement getSelenideCard() {
+        return root;
+    }
+
+    public GuestCard(SelenideElement root) {
         this.root = root;
     }
 
