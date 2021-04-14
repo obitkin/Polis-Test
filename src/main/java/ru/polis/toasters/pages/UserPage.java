@@ -1,34 +1,21 @@
 package ru.polis.toasters.pages;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
+import ru.polis.toasters.elements.Toolbar;
+import ru.polis.toasters.elements.ToolbarRight;
 
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selectors.byXpath;
 
 public class UserPage {
 
-    private final ElementsCollection toolbar = $$(byXpath("//ul[@class=\"toolbar_nav\"]/li"));
+    private final Toolbar toolbar = new Toolbar();
 
-    private ElementsCollection getToolbars() {
+    public Toolbar getToolbars() {
         return toolbar;
     }
 
-    public GuestPage goToGuest() {
-        //Надо исправить клик с 4 на String
-        getToolbars().get(4).click();
-        return new GuestPage();
+    private final ToolbarRight toolbarRight = new ToolbarRight();
+
+    public ToolbarRight getToolbarRight() {
+        return toolbarRight;
     }
 
-    // Функция поиска кнопки "Сообщения" в Toolbar-е
-    public MessagePage goToMessage() {
-        getToolbars().get(0).click();
-        return new MessagePage();
-    }
-
-    // Функция поиска кнопки выхода из аккаунта
-    public SelenideElement logOut(String xpath) {
-        return $(byXpath(xpath));
-    }
 }
