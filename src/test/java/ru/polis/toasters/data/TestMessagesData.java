@@ -1,3 +1,5 @@
+package ru.polis.toasters.data;
+
 public interface TestMessagesData {
     // Данные бота 1
     String user1 = "89995632015";

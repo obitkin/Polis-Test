@@ -1,3 +1,5 @@
+package ru.polis.toasters.pages;
+
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selectors.byClassName;

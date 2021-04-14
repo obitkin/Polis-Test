@@ -1,5 +1,13 @@
+package ru.polis.toasters.tests;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;
+import ru.polis.toasters.data.TestData;
+import ru.polis.toasters.pages.GuestPage;
+import ru.polis.toasters.pages.LoginPage;
+import ru.polis.toasters.pages.UserCard;
+import ru.polis.toasters.pages.UserPage;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +25,7 @@ public class Test implements TestData {
         loginPage = new LoginPage();
 
         //Логинимся
-        UserPage userPage = loginPage.loginMe(login, password);
+        UserPage userPage = loginPage.loginMe(TestData.login, TestData.password);
 
         //Кликаем на "Гостей" в туллбаре
         GuestPage guestPage = userPage.goToGuest();
@@ -26,7 +34,7 @@ public class Test implements TestData {
         List<UserCard> listOfUsers = guestPage.getGuestCard();
 
         //Проверяем что размер одинаков
-        assertEquals(namesFromTest.size(), listOfUsers.size());
+        Assertions.assertEquals(TestData.namesFromTest.size(), listOfUsers.size());
 
         //Просто вывод имен для отладки
         //listOfUsers.forEach(x -> System.out.println(x.getName()));
@@ -39,7 +47,7 @@ public class Test implements TestData {
                             .map(UserCard::getName)
                             .collect(Collectors.toList());
 
-        for (String nameTest : namesFromTest) {
+        for (String nameTest : TestData.namesFromTest) {
             assertionsForNames.add(
                     () -> assertTrue(
                             namesFromPage.contains(nameTest),

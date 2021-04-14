@@ -1,3 +1,5 @@
+package ru.polis.toasters.pages;
+
 import com.codeborne.selenide.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ public class GuestPage {
         /*
          * Нижная строка пресдтавляет собой выход логики теста в класс POM
          * Эту архитектуру можно улучшить
-         * Вроде предлагалось в UserCard добавить статический метод получения листа карт гостей
+         * Вроде предлагалось в ru.polis.toasters.pages.UserCard добавить статический метод получения листа карт гостей
          * И там сделать проверку на появление этих карт/страницы гостей
          */
         guestCards.shouldBe(CollectionCondition.sizeGreaterThan(1));

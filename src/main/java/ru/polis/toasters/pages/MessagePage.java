@@ -1,3 +1,5 @@
+package ru.polis.toasters.pages;
+
 import com.codeborne.selenide.*;
 import io.github.sukgu.*;
 import java.util.List;

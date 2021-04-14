@@ -1,3 +1,5 @@
+package ru.polis.toasters.data;
+
 import java.util.List;
 
 public interface TestData {
