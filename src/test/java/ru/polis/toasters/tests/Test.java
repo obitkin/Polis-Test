@@ -1,17 +1,16 @@
 package ru.polis.toasters.tests;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.function.Executable;
 import ru.polis.toasters.data.TestData;
+import ru.polis.toasters.elements.GuestCard;
 import ru.polis.toasters.pages.GuestPage;
 import ru.polis.toasters.pages.LoginPage;
-import ru.polis.toasters.pages.UserCard;
 import ru.polis.toasters.pages.UserPage;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Selenide.closeWindow;
+import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,40 +21,29 @@ public class Test implements TestData {
 
     @org.junit.jupiter.api.Test
     public void MyTest() {
-        loginPage = new LoginPage();
 
         //Логинимся
-        UserPage userPage = loginPage.loginMe(TestData.login, TestData.password);
+        loginPage = new LoginPage();
+        loginPage.loginMe(user2, password2);
+        open(url1);
+        closeWindow();
+
+        loginPage = new LoginPage();
+        UserPage userPage = loginPage.loginMe(user1, password1);
 
         //Кликаем на "Гостей" в туллбаре
-        GuestPage guestPage = userPage.goToGuest();
+        GuestPage guestPage = userPage.getToolbars().goToGuest();
 
         //Получаем список гостей
-        List<UserCard> listOfUsers = guestPage.getGuestCard();
+        List<GuestCard> listOfGuests = guestPage.getGuestBlock().getGuestCard();
 
-        //Проверяем что размер одинаков
-        Assertions.assertEquals(TestData.namesFromTest.size(), listOfUsers.size());
+        List<String> str = listOfGuests.stream().map(GuestCard::getName).collect(Collectors.toList());
+        listOfGuests.get(0).removeFromGuests();
+        str.forEach(System.out::println);
+        //Проверяем что среди гостей есть постетитель
+        Assertions.assertTrue(str.contains(userName2));
 
-        //Просто вывод имен для отладки
-        //listOfUsers.forEach(x -> System.out.println(x.getName()));
-
-        //Проверяем что каждое имя из тестовых данных содержится на странице
-        //Тут бы пригодился SoftAssert из TestNG, чтобы не падать на первом отсутствующем имени
-        //Но если делать через AssertAll то прикольно
-        List<Executable> assertionsForNames = new ArrayList<>();
-        final List<String> namesFromPage = listOfUsers.stream()
-                            .map(UserCard::getName)
-                            .collect(Collectors.toList());
-
-        for (String nameTest : TestData.namesFromTest) {
-            assertionsForNames.add(
-                    () -> assertTrue(
-                            namesFromPage.contains(nameTest),
-                            "Имя " + nameTest + " не найдено на странице"));
-        }
-        Assertions.assertAll(assertionsForNames);
-
-        //Просто клик на шару
-        listOfUsers.get(0).getMessageButton().click();
+        //Выходим
+        guestPage.getToolbarRight().exit();
     }
 }
