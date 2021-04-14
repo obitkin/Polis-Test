@@ -5,16 +5,13 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.Assertions;
 import ru.polis.toasters.data.TestMessagesData;
+import ru.polis.toasters.elements.Toolbar;
 import ru.polis.toasters.pages.LoginPage;
 import ru.polis.toasters.pages.MessagePage;
-import ru.polis.toasters.pages.UserPage;
-
 import java.time.Duration;
 import java.util.List;
 
 import static com.codeborne.selenide.Selectors.byXpath;
-import static com.codeborne.selenide.Selenide.closeWindow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static com.codeborne.selenide.Selenide.$;
 
 public class TestMessages implements TestMessagesData {
@@ -28,9 +25,10 @@ public class TestMessages implements TestMessagesData {
     @org.junit.jupiter.api.Test
     public void TestMessagesSmiles() {
         // Логинимся первым ботом
-        UserPage userPage1 = login.loginMe(TestMessagesData.user1, TestMessagesData.password1);
+        login.loginMe(TestMessagesData.user1, TestMessagesData.password1);
         // Переходим в "Сообщения" в Toolbar
-        MessagePage msg1 = userPage1.getToolbars().goToMessage();
+        Toolbar toolbar = new Toolbar();
+        MessagePage msg1 = toolbar.goToMessage();
         // Ожидаем прогрузку вкладки "Сообщения" (теневой DOM)
         $(byXpath(TestMessagesData.messageLayer)).shouldBe(Condition.appear, Duration.ofSeconds(10));
         // Получаем нужного адресата
@@ -52,17 +50,20 @@ public class TestMessages implements TestMessagesData {
         SelenideElement send = msg1.getWebElementFromShadowDom(TestMessagesData.sendSmilesButton);
         send.click();
         // Нажимаем на кнопку выхода из системы
-        // Но тут бы в страницу MessagePage добавить метод exitWithCheck из ToolbarRight
-        closeWindow();
+        SelenideElement logOutBut1 = toolbar.logOut(TestMessagesData.logOutButton);
+        logOutBut1.click();
+        // Выходим из системы
+        SelenideElement logOut1 = toolbar.logOut(TestMessagesData.logOutClick);
+        logOut1.click();
+        // Подтверждаем выход из системы
+        SelenideElement acceptLogOut1 = toolbar.logOut(TestMessagesData.acceptLogOutClick);
+        acceptLogOut1.click();
 
 
         // Логинимся вторым ботом
-        // Мб стоит создавать новый браузер
-        // юзеры не с одного браузера же заходят(вдруг там куки будут, я хз)
-        login = new LoginPage();
-        UserPage userPage2 = login.loginMe(TestMessagesData.user2, TestMessagesData.password2);
+        login.loginMe(TestMessagesData.user2, TestMessagesData.password2);
         // Переходим в "Сообщения" в Toolbar
-        MessagePage msg2 = userPage2.getToolbars().goToMessage();
+        MessagePage msg2 = toolbar.goToMessage();
         // Ожидаем прогрузку вкладки "Сообщения" (теневой DOM)
         $(byXpath(TestMessagesData.messageLayer)).shouldBe(Condition.appear, Duration.ofSeconds(10));
         // Получаем нужного адресата
@@ -82,7 +83,14 @@ public class TestMessages implements TestMessagesData {
             Assertions.assertEquals(lastMessageElements.get(i).getAttribute("alt"), TestMessagesData.smile);
         }
         // Нажимаем на кнопку выхода из системы
-        closeWindow();
+        SelenideElement logOutBut2 = toolbar.logOut(TestMessagesData.logOutButton);
+        logOutBut2.click();
+        // Выходим из системы
+        SelenideElement logOut2 = toolbar.logOut(TestMessagesData.logOutClick);
+        logOut2.click();
+        // Подтверждаем выход из системы
+        SelenideElement acceptLogOut2 = toolbar.logOut(TestMessagesData.acceptLogOutClick);
+        acceptLogOut2.click();
     }
 
     @org.junit.jupiter.api.AfterAll

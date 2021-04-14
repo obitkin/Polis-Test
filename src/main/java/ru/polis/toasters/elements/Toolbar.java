@@ -1,10 +1,13 @@
 package ru.polis.toasters.elements;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+import ru.polis.toasters.pages.FriendsPage;
 import ru.polis.toasters.pages.GuestPage;
 import ru.polis.toasters.pages.MessagePage;
 
 import static com.codeborne.selenide.Selectors.byXpath;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class Toolbar {
@@ -25,5 +28,16 @@ public class Toolbar {
     public MessagePage goToMessage() {
         getToolbar().get(0).click();
         return new MessagePage();
+    }
+
+    // Функция поиска кнопки выхода из аккаунта
+    public SelenideElement logOut(String xpath) {
+        return $(byXpath(xpath));
+    }
+
+    // Функция поиска кнопки "Друзья" в Toolbar-е
+    public FriendsPage goToFriends() {
+        getToolbar().get(3).click();
+        return new FriendsPage();
     }
 }
