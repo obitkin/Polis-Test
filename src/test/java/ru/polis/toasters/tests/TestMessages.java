@@ -1,80 +1,61 @@
 package ru.polis.toasters.tests;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.*;
 import org.junit.jupiter.api.Assertions;
 import ru.polis.toasters.data.TestMessagesData;
 import ru.polis.toasters.elements.Toolbar;
+import ru.polis.toasters.elements.ToolbarRight;
 import ru.polis.toasters.pages.LoginPage;
 import ru.polis.toasters.pages.MessagePage;
-import java.time.Duration;
 import java.util.List;
 
-import static com.codeborne.selenide.Selectors.byXpath;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.closeWindow;
 
 public class TestMessages implements TestMessagesData {
     static LoginPage login;
+    static Toolbar toolbar;
+    static ToolbarRight exit;
 
     @org.junit.jupiter.api.BeforeAll
     public static void Start() {
         login = new LoginPage();
+        toolbar = new Toolbar();
+        exit = new ToolbarRight();
     }
 
+    // Тест на отправку и прием смайликов в беседе
     @org.junit.jupiter.api.Test
     public void TestMessagesSmiles() {
         // Логинимся первым ботом
         login.loginMe(TestMessagesData.user1, TestMessagesData.password1);
         // Переходим в "Сообщения" в Toolbar
-        Toolbar toolbar = new Toolbar();
         MessagePage msg1 = toolbar.goToMessage();
-        // Ожидаем прогрузку вкладки "Сообщения" (теневой DOM)
-        $(byXpath(TestMessagesData.messageLayer)).shouldBe(Condition.appear, Duration.ofSeconds(10));
+        // Ожидаем загрузку вкладки "Сообщения" (теневой DOM)
+        msg1.waitMessages();
         // Получаем нужного адресата
-        SelenideElement msg1To = msg1.getWebElementFromShadowDom(TestMessagesData.user2Dialog);
-        msg1To.click();
+        msg1.openUserDialog(TestMessagesData.userName2);
         // Нажимаем на кнопку со смайликами
-        SelenideElement smileBut = msg1.getWebElementFromShadowDom(TestMessagesData.smileMessageButton);
-        smileBut.click();
+        msg1.clickWebElementFromShadowDom(TestMessagesData.smileMessageButton);
         // Выбираем отправку смайликов
-        SelenideElement smileBar = msg1.getWebElementFromShadowDom(TestMessagesData.smileLableButton);
-        smileBar.click();
-        // Кликаем по выбранному смайлику (smileCnt) раз
-        SelenideElement smileIcon = msg1.getWebElementFromShadowDom(TestMessagesData.smileIconButton);
-        for (int i = 0; i < TestMessagesData.smileCnt; i++)
-        {
-            smileIcon.click();
-        }
+        msg1.clickWebElementFromShadowDom(TestMessagesData.smileLableButton);
+        // Находим нужный смайл и кликаем по нему (smileCnt) раз
+        msg1.getSmileAndClick(TestMessagesData.smile, TestMessagesData.smileCnt);
         // Отправляем сообщение со смайликами
-        SelenideElement send = msg1.getWebElementFromShadowDom(TestMessagesData.sendSmilesButton);
-        send.click();
-        // Нажимаем на кнопку выхода из системы
-        SelenideElement logOutBut1 = toolbar.logOut(TestMessagesData.logOutButton);
-        logOutBut1.click();
-        // Выходим из системы
-        SelenideElement logOut1 = toolbar.logOut(TestMessagesData.logOutClick);
-        logOut1.click();
-        // Подтверждаем выход из системы
-        SelenideElement acceptLogOut1 = toolbar.logOut(TestMessagesData.acceptLogOutClick);
-        acceptLogOut1.click();
+        msg1.clickWebElementFromShadowDom(TestMessagesData.sendSmilesButton);
+        // Выходим из профиля
+        exit.exitWithCheck();
 
 
         // Логинимся вторым ботом
         login.loginMe(TestMessagesData.user2, TestMessagesData.password2);
         // Переходим в "Сообщения" в Toolbar
         MessagePage msg2 = toolbar.goToMessage();
-        // Ожидаем прогрузку вкладки "Сообщения" (теневой DOM)
-        $(byXpath(TestMessagesData.messageLayer)).shouldBe(Condition.appear, Duration.ofSeconds(10));
+        // Ожидаем загрузку вкладки "Сообщения" (теневой DOM)
+        msg2.waitMessages();
         // Получаем нужного адресата
-        SelenideElement msg2To = msg2.getWebElementFromShadowDom(TestMessagesData.user1Dialog);
-        msg2To.click();
-        // Получаем список сообщений в диалоге
-        List<SelenideElement> messages = msg2.getWebElementsFromShadowDom(TestMessagesData.getMessages);
-        // Выбираем последнее сообщение
-        SelenideElement lastMessage = messages.get(messages.size() - 1);
-        // Получаем список элементов внутри последнего сообщения
-        List<SelenideElement> lastMessageElements = lastMessage.$$(byXpath(TestMessagesData.elementsMessages));
+        msg2.openUserDialog(TestMessagesData.userName1);
+        // Получаем все элементы последнего сообщения в диалоге
+        List<SelenideElement> lastMessageElements = msg2.getLastMessageElements();
         // Сравниваем кол-во элементов в полученном и отправленном сообщениях
         Assertions.assertEquals(lastMessageElements.size(), TestMessagesData.smileCnt);
         // Сравниваем полученное и отправленное сообщения поэлементно
@@ -82,15 +63,10 @@ public class TestMessages implements TestMessagesData {
         {
             Assertions.assertEquals(lastMessageElements.get(i).getAttribute("alt"), TestMessagesData.smile);
         }
-        // Нажимаем на кнопку выхода из системы
-        SelenideElement logOutBut2 = toolbar.logOut(TestMessagesData.logOutButton);
-        logOutBut2.click();
-        // Выходим из системы
-        SelenideElement logOut2 = toolbar.logOut(TestMessagesData.logOutClick);
-        logOut2.click();
-        // Подтверждаем выход из системы
-        SelenideElement acceptLogOut2 = toolbar.logOut(TestMessagesData.acceptLogOutClick);
-        acceptLogOut2.click();
+        // Выходим из профиля
+        exit.exitWithCheck();
+        // Закрываем окно
+        closeWindow();
     }
 
     @org.junit.jupiter.api.AfterAll

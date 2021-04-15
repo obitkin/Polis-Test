@@ -1,19 +1,18 @@
 package ru.polis.toasters.pages;
 
-import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import ru.polis.toasters.elements.Toolbar;
+import java.time.Duration;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selectors.byXpath;
+import static com.codeborne.selenide.Selenide.*;
 
 // PageObject для страницы "Добавить друга"
 public class AddFriendPage {
-    // Toolbar для всех основных разделов сайта
-    private final ElementsCollection toolbar = $$(byXpath("//ul[@class=\"toolbar_nav\"]/li"));
+    private final Toolbar toolbar = new Toolbar();
 
-    // Получает объект toolbar
-    private ElementsCollection getToolbars() {
+    public Toolbar getToolbars() {
         return toolbar;
     }
 
@@ -34,7 +33,25 @@ public class AddFriendPage {
 
     // Переход на страницу "Друзья"
     public FriendsPage goToFriends() {
-        getToolbars().get(3).click();
+        getToolbars().goToFriends();
         return new FriendsPage();
+    }
+
+    // Добавляет заданного пользователя в друзья
+    public void addNewFriend(String user) {
+        String addFriendField = ".//input[@type='text' and @placeholder='Введите имя или название']";
+        SelenideElement addNewFriendField = getNewFriendField(addFriendField);
+        executeJavaScript("arguments[0].click()", addNewFriendField);
+        addNewFriendField.sendKeys(user);
+        String findButton = ".//span[text()='Найти' and @class='content__0ej09']//..//..//span[contains(@class, 'button-core')]";
+        $(byXpath(findButton)).shouldBe(Condition.appear, Duration.ofSeconds(10));
+        getFindButton(findButton).click();
+        String waitResult = ".//div[contains(text(), 'Найден')]";
+        $(byXpath(waitResult)).shouldBe(Condition.appear, Duration.ofSeconds(10));
+        String filteredPeopleList = ".//div[@class='row__px8cs skip-first-gap__m3nyy']";
+        SelenideElement firstPerson = getFirstPerson(filteredPeopleList);
+        firstPerson.click();
+        String addButtonFriend = ".//span[@class='content__0ej09' and text()='Добавить в друзья']";
+        firstPerson.$(byXpath(addButtonFriend)).click();
     }
 }

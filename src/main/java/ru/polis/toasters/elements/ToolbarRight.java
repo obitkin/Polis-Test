@@ -1,14 +1,13 @@
 package ru.polis.toasters.elements;
 
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
+import static com.codeborne.selenide.Selectors.byXpath;
 
 import static com.codeborne.selenide.Selenide.$;
 
 public class ToolbarRight {
 
-    private final SelenideElement root = $("div.toolbar_dropdown_w");
+    private final SelenideElement root = $(byXpath(".//div[@class='ucard-mini toolbar_ucard js-toolbar-menu']"));
 
     public SelenideElement getToolbarRight() {
         return root;
@@ -16,13 +15,13 @@ public class ToolbarRight {
 
     public void exit() {
         root.click();
-        root.$(By.xpath(".//a[text()='Выйти']")).click();
+        root.$(byXpath(".//a[text()='Выйти']")).click();
     }
 
     public void exitWithCheck() {
         root.click();
-        root.$(By.xpath(".//a[text()='Выйти']")).click();
-        $(By.xpath("//input[@data-l=\"t,logout\"]")).click();
+        $(byXpath(".//a[text()='Выйти']")).click();
+        $(byXpath(".//input[@value='Выйти']")).click();
     }
 
 }
