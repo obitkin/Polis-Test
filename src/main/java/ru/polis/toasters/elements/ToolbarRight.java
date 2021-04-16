@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class ToolbarRight {
 
-    private final SelenideElement root = $(byXpath(".//div[@class='ucard-mini toolbar_ucard js-toolbar-menu']"));
+    private final SelenideElement root = $("div.toolbar_dropdown_w");
 
     public SelenideElement getToolbarRight() {
         return root;
