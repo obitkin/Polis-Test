@@ -11,17 +11,15 @@ import ru.polis.toasters.pages.LoginPage;
 import ru.polis.toasters.pages.UserPage;
 import ru.polis.toasters.util.UserData;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 
-public class Test implements TestData {
+public class TestGuest implements TestData {
 
     LoginPage loginPage;
 
@@ -40,31 +38,32 @@ public class Test implements TestData {
 
         //Логинимся гостем
         loginPage = new LoginPage();
-        loginPage.loginMe(guest.user, guest.password);
+        UserPage userPageGuest = loginPage.loginMe(guest.user, guest.password);
         //Посещяем страницу хозяина
         open(master.url);
+        //Выходим из профиля
+        userPageGuest.getToolbarRight().exit();
+        //Закрываем браузер
         closeWindow();
 
         //Логинимся хозяином
         loginPage = new LoginPage();
-        UserPage userPage = loginPage.loginMe(master.user, master.password);
+        UserPage userPageMaster = loginPage.loginMe(master.user, master.password);
 
         //Кликаем на "Гостей" в туллбаре
-        GuestPage guestPage = userPage.getToolbars().goToGuest();
+        GuestPage guestPage = userPageMaster.getToolbars().goToGuest();
 
         //Получаем список гостей
         List<GuestCard> listOfGuests = guestPage.getGuestBlock().getGuestCard();
         //Получем имена гостей
         List<String> str = listOfGuests.stream().map(GuestCard::getName).collect(Collectors.toList());
-
+        //Удаляем из гостей хозяина нашего гостя
         listOfGuests.get(0).removeFromGuests();
-        str.forEach(System.out::println);
-
-        //Проверяем что среди гостей есть постетитель
+        //Проверяем что среди гостей есть наш гость
         Assertions.assertTrue(str.contains(guest.userName));
-
-        //Выходим
+        //Выходим из профиля
         guestPage.getToolbarRight().exit();
+        //Закрываем браузер
         closeWindow();
     }
 }
