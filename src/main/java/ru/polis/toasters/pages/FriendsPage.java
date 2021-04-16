@@ -12,6 +12,11 @@ import static com.codeborne.selenide.Selectors.byXpath;
 
 // PageObject для страницы "Друзья"
 public class FriendsPage {
+
+    public FriendsPage() {
+        waitFriends();
+    }
+
     // Выполняет переход на страницу "Добавить друга"
     public AddFriendPage goToFriendsAdd() {
         String friendAddLocator = ".//a[@title='Найти по имени и фамилии']";

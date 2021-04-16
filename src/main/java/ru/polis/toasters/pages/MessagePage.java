@@ -11,6 +11,11 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class MessagePage {
+
+    public MessagePage() {
+        waitMessages();
+    }
+
     // Функция ожидания загрузки вкладки "Сообщения"
     public void waitMessages() {
         String messageLayer = ".//div[@id='msg_layer']";

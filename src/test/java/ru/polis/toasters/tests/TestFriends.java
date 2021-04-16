@@ -2,11 +2,10 @@ package ru.polis.toasters.tests;
 
 import com.codeborne.selenide.*;
 import ru.polis.toasters.data.TestFriendsData;
-import ru.polis.toasters.elements.Toolbar;
-import ru.polis.toasters.elements.ToolbarRight;
 import ru.polis.toasters.pages.AddFriendPage;
 import ru.polis.toasters.pages.FriendsPage;
 import ru.polis.toasters.pages.LoginPage;
+import ru.polis.toasters.pages.UserPage;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,14 +13,10 @@ import static com.codeborne.selenide.Selenide.closeWindow;
 
 public class TestFriends implements TestFriendsData {
     static LoginPage login;
-    static Toolbar toolbar;
-    static ToolbarRight exit;
 
     @org.junit.jupiter.api.BeforeAll
     public static void Start() {
         login = new LoginPage();
-        toolbar = new Toolbar();
-        exit = new ToolbarRight();
     }
 
     // Тест на добавление друга. Работает только в том случае, если два выбранных пользователя еще не дружат друг с другом
@@ -29,25 +24,21 @@ public class TestFriends implements TestFriendsData {
     @org.junit.jupiter.api.Test
     public void TestFriendsAdd() {
         // Логинимся первым ботом
-        login.loginMe(TestFriendsData.user1, TestFriendsData.password1);
+        UserPage p1 = login.loginMe(TestFriendsData.user1, TestFriendsData.password1);
         // Переходим в "Друзья" в Toolbar
-        FriendsPage friend1 = toolbar.goToFriends();
-        // Ожидаем загрузки страницы "Друзья"
-        friend1.waitFriends();
+        FriendsPage friend1 = p1.getToolbars().goToFriends();
         // Заходим на страницу добавления нового друга
         AddFriendPage addNewFriend1 = friend1.goToFriendsAdd();
         // Добавляем нового друга
         addNewFriend1.addNewFriend(TestFriendsData.userID2);
         // Выходим из профиля
-        exit.exitWithCheck();
+        p1.getToolbarRight().exitWithCheck();
 
 
         // Логинимся вторым ботом
-        login.loginMe(TestFriendsData.user2, TestFriendsData.password2);
+        UserPage p2 = login.loginMe(TestFriendsData.user2, TestFriendsData.password2);
         // Переходим в "Друзья" в Toolbar
-        FriendsPage friend2 = toolbar.goToFriends();
-        // Ожидаем загрузки страницы "Друзья"
-        friend2.waitFriends();
+        FriendsPage friend2 = p2.getToolbars().goToFriends();
         // Переходим в раздел "Входящие заявки в друзья"
         friend2.goToFriendRequests(TestFriendsData.friendRequests);
         // Ожидаем появления заявок в друзья
@@ -55,31 +46,27 @@ public class TestFriends implements TestFriendsData {
         // Нажимаем на кнопку "Принять заявку в друзья"
         friend2.acceptClick(TestFriendsData.acceptButton);
         // Переходим на страницу "Друзья"
-        friend2 = toolbar.goToFriends();
-        // Ожидаем загрузки страницы "Друзья"
-        friend2.waitFriends();
+        friend2 = p2.getToolbars().goToFriends();
         // Получаем список всех друзей
         List<SelenideElement> friends2 = friend2.findFriends(TestFriendsData.allFriends);
         // Подсчитаем друзей, которые совпадают по имени с первым ботом
         // Количество совпадений должно быть ровно 1
         assertEquals(1, friend2.countFriend(friends2, TestFriendsData.userName1));
         // Выходим из профиля
-        exit.exitWithCheck();
+        p2.getToolbarRight().exitWithCheck();
 
 
         // Логинимся первым ботом
-        login.loginMe(TestFriendsData.user1, TestFriendsData.password1);
+        p1 = login.loginMe(TestFriendsData.user1, TestFriendsData.password1);
         // Переходим в "Друзья" в Toolbar
-        friend1 = toolbar.goToFriends();
-        // Ожидаем загрузки страницы "Друзья"
-        friend1.waitFriends();
+        friend1 = p1.getToolbars().goToFriends();
         // Получаем список имен друзей
         List<SelenideElement> friends1 = friend1.findFriends(TestFriendsData.allFriends);
         // Подсчитаем друзей, которые совпадают по имени со вторым ботом
         // Количество совпадений должно быть ровно 1
         assertEquals(1, friend1.countFriend(friends1, TestFriendsData.userName2));
         // Выходим из профиля
-        exit.exitWithCheck();
+        p1.getToolbarRight().exitWithCheck();
         // Закрываем окно
         closeWindow();
     }
@@ -88,11 +75,9 @@ public class TestFriends implements TestFriendsData {
     @org.junit.jupiter.api.Test
     public void TestFriendsDelete() {
         // Логинимся первым ботом
-        login.loginMe(TestFriendsData.user1, TestFriendsData.password1);
+        UserPage p1 = login.loginMe(TestFriendsData.user1, TestFriendsData.password1);
         // Переходим в "Друзья" в Toolbar
-        FriendsPage friend1 = toolbar.goToFriends();
-        // Ожидаем загрузки страницы "Друзья"
-        friend1.waitFriends();
+        FriendsPage friend1 = p1.getToolbars().goToFriends();
         // Получаем список имен друзей
         List<SelenideElement> friends1 = friend1.findFriends(TestFriendsData.allFriends);
         // Находим второго бота среди друзей
@@ -102,24 +87,20 @@ public class TestFriends implements TestFriendsData {
         // Удаляем друга
         friend1.clickDeleteFriend();
         // Переходим в "Друзья" в Toolbar
-        friend1 = toolbar.goToFriends();
-        // Ожидаем загрузки страницы "Друзья"
-        friend1.waitFriends();
+        friend1 = p1.getToolbars().goToFriends();
         // Получаем список имен друзей
         friends1 = friend1.findFriends(TestFriendsData.allFriends);
         // Проверяем, что друга с таким именем уже нет у бота в друзьях
         // Количество совпадений должно быть ровно 0
         assertEquals(0, friend1.countFriend(friends1, TestFriendsData.userName2));
         // Выходим из профиля
-        exit.exitWithCheck();
+        p1.getToolbarRight().exitWithCheck();
 
 
         // Логинимся вторым ботом
-        login.loginMe(TestFriendsData.user2, TestFriendsData.password2);
+        UserPage p2 = login.loginMe(TestFriendsData.user2, TestFriendsData.password2);
         // Переходим в "Друзья" в Toolbar
-        FriendsPage friend2 = toolbar.goToFriends();
-        // Ожидаем загрузки страницы "Друзья"
-        friend2.waitFriends();
+        FriendsPage friend2 = p2.getToolbars().goToFriends();
         // Заходим в "Подписки"
         friend2.goToFriendSubscriptions(friendSubscriptions);
         // Ожидаем загрузки вкладки "Подписки"
@@ -133,9 +114,7 @@ public class TestFriends implements TestFriendsData {
         // Удаляем подписчика
         friend2.clickDeleteSub();
         // Переходим в "Друзья" в Toolbar
-        friend2 = toolbar.goToFriends();
-        // Ожидаем загрузки страницы "Друзья"
-        friend2.waitFriends();
+        friend2 = p2.getToolbars().goToFriends();
         // Получаем список имен друзей
         List<SelenideElement> friends2 = friend2.findFriends(TestFriendsData.allFriends);
         // Проверяем, что у друга с таким именем уже нет у бота в друзьях
@@ -151,7 +130,7 @@ public class TestFriends implements TestFriendsData {
         // Количество совпадений должно быть ровно 0
         assertEquals(0, friend2.countFriend(mySubs, TestFriendsData.userName1));
         // Выходим из профиля
-        exit.exitWithCheck();
+        p2.getToolbarRight().exitWithCheck();
         // Закрываем окно
         closeWindow();
     }
