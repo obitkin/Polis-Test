@@ -1,6 +1,7 @@
 package ru.polis.toasters.elements;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 import ru.polis.toasters.pages.FriendsPage;
 import ru.polis.toasters.pages.GuestPage;
 import ru.polis.toasters.pages.MessagePage;
@@ -18,6 +19,9 @@ public class Toolbar {
 
     private final SelenideElement friends = root.$(byXpath("./li[@data-l=\"t,friends\"]"));
 
+    public int getGuestCounter() {
+        return guests.$$(By.className("toolbar_nav_notif")).size();
+    }
 
     public SelenideElement getToolbar() {
         return root;

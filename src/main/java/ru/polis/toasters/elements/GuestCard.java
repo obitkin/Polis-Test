@@ -2,6 +2,7 @@ package ru.polis.toasters.elements;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 
 import java.time.LocalTime;
 
@@ -29,8 +30,8 @@ public class GuestCard {
         return root.find(byClassName("ellip")).getText();
     }
 
-    public String getTime() {
-        return root.$("div.timestamp __highlight").getText();
+    public LocalTime getTime() {
+        return LocalTime.parse(root.find(byClassName("timestamp")).getText());
     }
 
     public SelenideElement getMessageButton() {
