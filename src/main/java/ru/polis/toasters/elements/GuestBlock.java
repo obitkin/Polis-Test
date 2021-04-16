@@ -11,12 +11,13 @@ public class GuestBlock {
 
     private final SelenideElement root = $("div#hook_Block_UserGuests");
 
+    private final ElementsCollection guestCards = root.$$(byXpath(".//div[@class=\"portlet_b\"]/.//div[@class=\"user-grid-card\"]"));
+
     public SelenideElement getSelenideBlock() {
         return root;
     }
 
     public List<GuestCard> getGuestCard() {
-        ElementsCollection guestCards = root.$$(byXpath(".//div[@class=\"portlet_b\"]/.//div[@class=\"user-grid-card\"]"));
         List<GuestCard> res = new ArrayList<>();
         for (SelenideElement s : guestCards) {
             res.add(new GuestCard(s));

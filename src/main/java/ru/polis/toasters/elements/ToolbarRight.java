@@ -9,19 +9,23 @@ public class ToolbarRight {
 
     private final SelenideElement root = $("div.toolbar_dropdown_w");
 
+    private final SelenideElement exitButton = root.$(byXpath(".//a[text()='Выйти']"));
+
+    private final SelenideElement exitConfirmButton = $(byXpath(".//input[@value='Выйти']"));
+
     public SelenideElement getToolbarRight() {
         return root;
     }
 
     public void exit() {
         root.click();
-        root.$(byXpath(".//a[text()='Выйти']")).click();
+        exitButton.click();
     }
 
     public void exitWithCheck() {
         root.click();
-        $(byXpath(".//a[text()='Выйти']")).click();
-        $(byXpath(".//input[@value='Выйти']")).click();
+        exitButton.click();
+        exitConfirmButton.click();
     }
 
 }
