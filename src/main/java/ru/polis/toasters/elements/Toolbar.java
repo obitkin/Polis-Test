@@ -1,6 +1,5 @@
 package ru.polis.toasters.elements;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import ru.polis.toasters.pages.FriendsPage;
 import ru.polis.toasters.pages.GuestPage;
@@ -8,25 +7,30 @@ import ru.polis.toasters.pages.MessagePage;
 
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 
 public class Toolbar {
 
-    private final ElementsCollection root = $$(byXpath(".//ul[@class=\"toolbar_nav\"]/li"));
+    private final SelenideElement root = $(byXpath(".//ul[@class=\"toolbar_nav\"]"));
 
-    public ElementsCollection getToolbar() {
+    private final SelenideElement guests = root.$(byXpath("./li[@data-l=\"t,guests\"]"));
+
+    private final SelenideElement message = root.$(byXpath("./li[@data-l=\"t,messages\"]"));
+
+    private final SelenideElement friends = root.$(byXpath("./li[@data-l=\"t,friends\"]"));
+
+
+    public SelenideElement getToolbar() {
         return root;
     }
 
     public GuestPage goToGuest() {
-        //Надо исправить клик с 4 на String
-        getToolbar().get(4).click();
+        guests.click();
         return new GuestPage();
     }
 
     // Функция поиска кнопки "Сообщения" в Toolbar-е
     public MessagePage goToMessage() {
-        getToolbar().get(0).click();
+        message.click();
         return new MessagePage();
     }
 
@@ -37,7 +41,7 @@ public class Toolbar {
 
     // Функция поиска кнопки "Друзья" в Toolbar-е
     public FriendsPage goToFriends() {
-        getToolbar().get(3).click();
+        friends.click();
         return new FriendsPage();
     }
 }
