@@ -35,8 +35,8 @@ public class FriendsPage {
     }
 
     // Ищет всех друзей данного пользователя
-    public List<SelenideElement> findFriends(String allFriends) {
-        return $$(byXpath(allFriends)).shouldBe(CollectionCondition.sizeGreaterThan(-1));
+    public List<SelenideElement> findFriends() {
+        return $$(byXpath(".//a[@class='n-t bold']"));
     }
 
     // Ищет друга в коллекции друзей

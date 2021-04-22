@@ -48,7 +48,7 @@ public class TestFriends implements TestFriendsData {
         // Переходим на страницу "Друзья"
         friend2 = p2.getToolbars().goToFriends();
         // Получаем список всех друзей
-        List<SelenideElement> friends2 = friend2.findFriends(TestFriendsData.allFriends);
+        List<SelenideElement> friends2 = friend2.findFriends();
         // Подсчитаем друзей, которые совпадают по имени с первым ботом
         // Количество совпадений должно быть ровно 1
         assertEquals(1, friend2.countFriend(friends2, TestFriendsData.userName1));
@@ -61,7 +61,7 @@ public class TestFriends implements TestFriendsData {
         // Переходим в "Друзья" в Toolbar
         friend1 = p1.getToolbars().goToFriends();
         // Получаем список имен друзей
-        List<SelenideElement> friends1 = friend1.findFriends(TestFriendsData.allFriends);
+        List<SelenideElement> friends1 = friend1.findFriends();
         // Подсчитаем друзей, которые совпадают по имени со вторым ботом
         // Количество совпадений должно быть ровно 1
         assertEquals(1, friend1.countFriend(friends1, TestFriendsData.userName2));
@@ -79,7 +79,7 @@ public class TestFriends implements TestFriendsData {
         // Переходим в "Друзья" в Toolbar
         FriendsPage friend1 = p1.getToolbars().goToFriends();
         // Получаем список имен друзей
-        List<SelenideElement> friends1 = friend1.findFriends(TestFriendsData.allFriends);
+        List<SelenideElement> friends1 = friend1.findFriends();
         // Находим второго бота среди друзей
         friend1.findFriend(friends1, TestFriendsData.userName2);
         // Кликаем по кнопке с дополнительной информацией о друге
@@ -89,7 +89,7 @@ public class TestFriends implements TestFriendsData {
         // Переходим в "Друзья" в Toolbar
         friend1 = p1.getToolbars().goToFriends();
         // Получаем список имен друзей
-        friends1 = friend1.findFriends(TestFriendsData.allFriends);
+        friends1 = friend1.findFriends();
         // Проверяем, что друга с таким именем уже нет у бота в друзьях
         // Количество совпадений должно быть ровно 0
         assertEquals(0, friend1.countFriend(friends1, TestFriendsData.userName2));
@@ -116,7 +116,7 @@ public class TestFriends implements TestFriendsData {
         // Переходим в "Друзья" в Toolbar
         friend2 = p2.getToolbars().goToFriends();
         // Получаем список имен друзей
-        List<SelenideElement> friends2 = friend2.findFriends(TestFriendsData.allFriends);
+        List<SelenideElement> friends2 = friend2.findFriends();
         // Проверяем, что у друга с таким именем уже нет у бота в друзьях
         // Количество совпадений должно быть ровно 0
         assertEquals(0, friend2.countFriend(friends2, TestFriendsData.userName1));
