@@ -15,11 +15,4 @@ public interface TestMessagesData {
     int smileCnt = 3;
     // Изображение смайлика
     String smile = "\uD83D\uDE02";
-
-    // Локатор для поиска кнопки "Смайлики"
-    String smileMessageButton = ".//msg-button[@title='Смайлики']";
-    // Локатор для поиска вкладки смайликов
-    String smileLableButton = "//msg-l10n[text()='Смайлики']";
-    // Локатор для поиска кнопки "Отправить сообщение"
-    String sendSmilesButton = "//msg-button[@title='Отправить']";
 }

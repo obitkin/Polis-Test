@@ -2,7 +2,6 @@ package ru.polis.toasters.pages;
 
 import com.codeborne.selenide.*;
 import io.github.sukgu.*;
-
 import java.time.Duration;
 import java.util.List;
 
@@ -22,10 +21,25 @@ public class MessagePage {
         $(byXpath(messageLayer)).shouldBe(Condition.appear, Duration.ofSeconds(10));
     }
 
-    // Функция поиска одного элемента по заданному локатору в теневом DOM и клика по нему
-    public void clickWebElementFromShadowDom(String findLocator) {
+    // Функция поиска кнопки отправки смайликов
+    public void smileButtonClick() {
+        String smileMessageButton = ".//msg-button[@title='Смайлики']";
         Shadow shadow = new Shadow(WebDriverRunner.getWebDriver());
-        $(shadow.findElementByXPath(findLocator)).click();
+        $(shadow.findElementByXPath(smileMessageButton)).click();
+    }
+
+    // Функция поиска вкладки "Смайлики"
+    public void smileLableClick() {
+        String smileLableButton = "//msg-l10n[text()='Смайлики']";
+        Shadow shadow = new Shadow(WebDriverRunner.getWebDriver());
+        $(shadow.findElementByXPath(smileLableButton)).click();
+    }
+
+    // Функция поиска кнопки "Отправить сообщение"
+    public void sendMessageClick() {
+        String sendSmilesButton = "//msg-button[@title='Отправить']";
+        Shadow shadow = new Shadow(WebDriverRunner.getWebDriver());
+        $(shadow.findElementByXPath(sendSmilesButton)).click();
     }
 
     // Функция поиска всех элементов по заданному локатору в теневом DOM

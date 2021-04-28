@@ -1,6 +1,5 @@
 package ru.polis.toasters.pages;
 
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import java.time.Duration;
@@ -25,28 +24,44 @@ public class FriendsPage {
     }
 
     // Ищет вкладку "Входящие запросы в друзья"
-    public void goToFriendRequests(String friendRequests) {
-        $(byXpath(friendRequests)).click();
+    public void goToFriendRequests() {
+        String friendsRequests = ".//div[contains(text(),'Заявки в друзья')]//..";
+        $(byXpath(friendsRequests)).click();
     }
 
     // Ищет кнопку "Принять заявку в друзья"
-    public void acceptClick(String acceptButton) {
-        $(byXpath(acceptButton)).click();
+    public void acceptClick() {
+        String acceptBut = ".//span[text()='Принять' and contains(@class, 'accept')]";
+        if ($(byXpath(acceptBut)).exists()) {
+            $(byXpath(acceptBut)).click();
+        }
+    }
+
+    // Ищет кнопку "Скрыть заявку в друзья"
+    public void declineClick() {
+        String declineBut = ".//span[text()='Скрыть' and contains(@class, 'decline')]";
+        if ($(byXpath(declineBut)).exists()) {
+            $(byXpath(declineBut)).click();
+        }
     }
 
     // Ищет всех друзей данного пользователя
     public List<SelenideElement> findFriends() {
-        return $$(byXpath(".//a[@class='n-t bold']"));
+        String friendsCards = ".//a[@class='n-t bold']";
+        return $$(byXpath(friendsCards));
     }
 
     // Ищет друга в коллекции друзей
-    public void findFriend(List<SelenideElement> friends, String user) {
+    public int findFriend(List<SelenideElement> friends, String user) {
+        int cnt = 0;
         for (SelenideElement friend : friends) {
             if (friend.toString().contains(user)) {
                 friend.click();
+                cnt++;
                 break;
             }
         }
+        return cnt;
     }
 
     // Клик по кнопке с дополнительной информацией
@@ -57,7 +72,10 @@ public class FriendsPage {
     }
 
     // Ищет вкладку "Подписки"
-    public void goToFriendSubscriptions(String friendSubscriptions) { $(byXpath(friendSubscriptions)).click();}
+    public void goToFriendSubscriptions() {
+        String friendsSubs = ".//a[contains(@href, 'subscriptions')]";
+        $(byXpath(friendsSubs)).click();
+    }
 
     // Ожидание загрузки вкладки "Входящие заявки в друзья"
     public void waitAccept() {
@@ -67,7 +85,7 @@ public class FriendsPage {
 
     // Ожидание загрузки вкладки "Друзья"
     public void waitFriends() {
-        String waitFriends = ".//div[@id='middleColumn']";
+        String waitFriends = ".//div[@id='hook_Block_MyFriendsMRB']";
         $(byXpath(waitFriends)).shouldBe(Condition.appear, Duration.ofSeconds(10));
     }
 
@@ -96,14 +114,14 @@ public class FriendsPage {
     // Получает всех подписчиков пользователя
     public List<SelenideElement> getSubs() {
         String allSubs = ".//a[@class='n-t bold']";
-        return $$(byXpath(allSubs)).shouldBe(CollectionCondition.sizeGreaterThan(-1));
+        return $$(byXpath(allSubs));
     }
 
     // Получает количество совпадений имени друга со всеми друзьями
     public int countFriend(List<SelenideElement> friends, String user) {
         int cnt = 0;
         for (SelenideElement friend : friends) {
-            if (friend.text().equals(user)) {
+            if (friend.toString().contains(user)) {
                 cnt++;
             }
         }
@@ -111,12 +129,23 @@ public class FriendsPage {
     }
 
     // Получает выбранного подписчика пользователя из списка подписчиков пользователя
-    public void getSub(List<SelenideElement> mySubs, String name) {
+    public int getSub(List<SelenideElement> mySubs, String name) {
+        int cnt = 0;
         for (SelenideElement mySub : mySubs) {
             if (mySub.toString().contains(name)) {
                 mySub.click();
+                cnt++;
                 break;
             }
         }
+        return cnt;
+    }
+
+    // Проверяет, существуют ли подписчики у пользователя
+    public boolean subsExist() {
+        String subsBlock = ".//div[@id='hook_Block_UserFriendRequestMRB']";
+        $(byXpath(subsBlock)).shouldBe(Condition.appear, Duration.ofSeconds(10));
+        String subsNotExist = ".//div[contains(text(),'хотят с вами дружить')]";
+        return !$(byXpath(subsNotExist)).exists();
     }
 }

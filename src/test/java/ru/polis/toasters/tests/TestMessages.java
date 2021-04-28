@@ -29,13 +29,13 @@ public class TestMessages implements TestMessagesData {
         // Получаем нужного адресата
         msg1.openUserDialog(TestMessagesData.userName2);
         // Нажимаем на кнопку со смайликами
-        msg1.clickWebElementFromShadowDom(TestMessagesData.smileMessageButton);
+        msg1.smileButtonClick();
         // Выбираем отправку смайликов
-        msg1.clickWebElementFromShadowDom(TestMessagesData.smileLableButton);
+        msg1.smileLableClick();
         // Находим нужный смайл и кликаем по нему (smileCnt) раз
         msg1.getSmileAndClick(TestMessagesData.smile, TestMessagesData.smileCnt);
         // Отправляем сообщение со смайликами
-        msg1.clickWebElementFromShadowDom(TestMessagesData.sendSmilesButton);
+        msg1.sendMessageClick();
         // Выходим из профиля
         p1.getToolbarRight().exitWithCheck();
 
@@ -57,12 +57,11 @@ public class TestMessages implements TestMessagesData {
         }
         // Выходим из профиля
         p2.getToolbarRight().exitWithCheck();
-        // Закрываем окно
-        closeWindow();
     }
 
     @org.junit.jupiter.api.AfterAll
     public static void Stop() {
+        closeWindow();
         WebDriverRunner.closeWebDriver();
     }
 }

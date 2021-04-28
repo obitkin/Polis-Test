@@ -43,15 +43,19 @@ public class AddFriendPage {
         SelenideElement addNewFriendField = getNewFriendField(addFriendField);
         executeJavaScript("arguments[0].click()", addNewFriendField);
         addNewFriendField.sendKeys(user);
-        String findButton = ".//span[text()='Найти' and @class='content__0ej09']//..//..//span[contains(@class, 'button-core')]";
+        String findButton = ".//span[text()='Найти']";
         $(byXpath(findButton)).shouldBe(Condition.appear, Duration.ofSeconds(10));
         getFindButton(findButton).click();
         String waitResult = ".//div[contains(text(), 'Найден')]";
         $(byXpath(waitResult)).shouldBe(Condition.appear, Duration.ofSeconds(10));
         String filteredPeopleList = ".//div[@class='row__px8cs skip-first-gap__m3nyy']";
         SelenideElement firstPerson = getFirstPerson(filteredPeopleList);
-        firstPerson.click();
-        String addButtonFriend = ".//span[@class='content__0ej09' and text()='Добавить в друзья']";
-        firstPerson.$(byXpath(addButtonFriend)).click();
+        String ifFriend = ".//div[text()='друг']";
+        String ifRequest = ".//div[contains(text(),'отправлен')]";
+        if (!firstPerson.$(byXpath(ifFriend)).exists() && !firstPerson.$(byXpath(ifRequest)).exists()) {
+            firstPerson.click();
+            String addButtonFriend = ".//span[@class='content__0ej09' and text()='Добавить в друзья']";
+            firstPerson.$(byXpath(addButtonFriend)).click();
+        }
     }
 }
