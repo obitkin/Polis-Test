@@ -35,13 +35,13 @@ public class TestDeleteFriends implements TestFriendsData {
     @org.junit.jupiter.api.Test
     public void TestFriendsDelete() {
         // Логинимся первым ботом
-        UserPage p1 = login.loginMe(TestFriendsData.user1, TestFriendsData.password1);
+        UserPage p1 = login.loginMe(user1.user, user1.password);
         // Переходим в "Друзья" в Toolbar
         FriendsPage friend1 = p1.getToolbars().goToFriends();
         // Получаем список имен друзей
         List<SelenideElement> friends1 = friend1.findFriends();
         // Находим второго бота среди друзей
-        friend1.findFriend(friends1, TestFriendsData.userName2);
+        friend1.findFriend(friends1, user2.userName);
         // Кликаем по кнопке с дополнительной информацией о друге
         friend1.clickAddInfo();
         // Удаляем друга
@@ -52,13 +52,13 @@ public class TestDeleteFriends implements TestFriendsData {
         friends1 = friend1.findFriends();
         // Проверяем, что друга с таким именем уже нет у бота в друзьях
         // Количество совпадений должно быть ровно 0
-        assertEquals(0, friend1.countFriend(friends1, TestFriendsData.userName2));
+        assertEquals(0, friend1.countFriend(friends1, user2.userName));
         // Выходим из профиля
         p1.getToolbarRight().exitWithCheck();
 
 
         // Логинимся вторым ботом
-        UserPage p2 = login.loginMe(TestFriendsData.user2, TestFriendsData.password2);
+        UserPage p2 = login.loginMe(user2.user, user2.password);
         // Переходим в "Друзья" в Toolbar
         FriendsPage friend2 = p2.getToolbars().goToFriends();
         // Заходим в "Подписки"
@@ -68,7 +68,7 @@ public class TestDeleteFriends implements TestFriendsData {
         // Получаем список имен подписок
         List<SelenideElement> mySubs = friend2.getSubs();
         // Заходим на страницу к выбранному подписчику
-        friend2.getSub(mySubs, TestFriendsData.userName1);
+        friend2.getSub(mySubs, user1.userName);
         // Находим кнопку с дополнительной информацией о друге
         friend2.clickAddInfo();
         // Удаляем подписчика
@@ -79,7 +79,7 @@ public class TestDeleteFriends implements TestFriendsData {
         List<SelenideElement> friends2 = friend2.findFriends();
         // Проверяем, что у друга с таким именем уже нет у бота в друзьях
         // Количество совпадений должно быть ровно 0
-        assertEquals(0, friend2.countFriend(friends2, TestFriendsData.userName1));
+        assertEquals(0, friend2.countFriend(friends2, user1.userName));
         // Заходим в "Подписки"
         friend2.goToFriendSubscriptions();
         // Ожидаем загрузки вкладки "Подписки"
@@ -88,7 +88,7 @@ public class TestDeleteFriends implements TestFriendsData {
         mySubs = friend2.getSubs();
         // Считаем количество людей с именем первого бота
         // Количество совпадений должно быть ровно 0
-        assertEquals(0, friend2.countFriend(mySubs, TestFriendsData.userName1));
+        assertEquals(0, friend2.countFriend(mySubs, user1.userName));
         // Выходим из профиля
         p2.getToolbarRight().exitWithCheck();
     }
@@ -99,6 +99,7 @@ public class TestDeleteFriends implements TestFriendsData {
         WebDriverRunner.closeWebDriver();
     }
 
+    // Добавляет людей в друзья, если они еще не в друзьях друг у друга
     public static void addIfNotFriends(UserData user1, UserData user2) {
         // Логинимся первым ботом
         UserPage p1 = login.loginMe(user1.user, user1.password);
