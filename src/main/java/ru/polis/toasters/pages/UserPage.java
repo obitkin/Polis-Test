@@ -6,16 +6,16 @@ import ru.polis.toasters.elements.ToolbarRight;
 
 public class UserPage {
 
-    private final Toolbar toolbar = new Toolbar();
+    private Toolbar toolbar;
 
     public Toolbar getToolbars() {
-        return toolbar;
+        return (toolbar == null) ? toolbar = new Toolbar() : toolbar;
     }
 
-    private final ToolbarRight toolbarRight = new ToolbarRight();
+    private ToolbarRight toolbarRight;
 
     public ToolbarRight getToolbarRight() {
-        return toolbarRight;
+        return (toolbarRight == null) ? toolbarRight = new ToolbarRight() : toolbarRight;
     }
 
 }
