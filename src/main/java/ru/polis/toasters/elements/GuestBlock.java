@@ -17,12 +17,21 @@ public class GuestBlock {
         return root;
     }
 
-    public List<GuestCard> getGuestCard() {
+    public List<GuestCard> getGuestCards() {
         List<GuestCard> res = new ArrayList<>();
         for (SelenideElement s : guestCards) {
             res.add(new GuestCard(s));
         }
         return res;
+    }
+
+    public GuestCard getGuestCard(String name) {
+        for (GuestCard guestCard : getGuestCards()) {
+            if (guestCard.getName().equals(name)) {
+                return guestCard;
+            }
+        }
+        return null;
     }
 
 }
