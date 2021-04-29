@@ -26,9 +26,9 @@ public class GuestBlock {
     }
 
     public GuestCard getGuestCard(String name) {
-        for (GuestCard guestCard : getGuestCards()) {
-            if (guestCard.getName().equals(name)) {
-                return guestCard;
+        for (GuestCard g : getGuestCards()) {
+            if (g.getName().equals(name)) {
+                return g;
             }
         }
         return null;

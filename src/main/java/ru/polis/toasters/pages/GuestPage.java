@@ -7,22 +7,22 @@ import ru.polis.toasters.elements.ToolbarRight;
 
 public class GuestPage {
 
-    private Toolbar toolbar;
+    private Toolbar toolbar = new Toolbar();
 
     public Toolbar getToolbars() {
-        return (toolbar == null) ? toolbar = new Toolbar() : toolbar;
+        return toolbar;
     }
 
-    private GuestBlock guestBlock;
+    private GuestBlock guestBlock = new GuestBlock();
 
     public GuestBlock getGuestBlock() {
-        return (guestBlock == null) ? guestBlock = new GuestBlock() : guestBlock;
+        return guestBlock;
     }
 
-    private ToolbarRight toolbarRight;
+    private ToolbarRight toolbarRight = new ToolbarRight();
 
     public ToolbarRight getToolbarRight() {
-        return (toolbarRight == null) ? toolbarRight = new ToolbarRight() : toolbarRight;
+        return toolbarRight;
     }
 
     public GuestPage() {
