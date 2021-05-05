@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import ru.polis.toasters.data.TestMessagesData;
 import ru.polis.toasters.pages.LoginPage;
 import ru.polis.toasters.pages.MessagePage;
-import ru.polis.toasters.pages.UserPage;
+import ru.polis.toasters.pages.FeedPage;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class TestMessages implements TestMessagesData {
     @org.junit.jupiter.api.Test
     public void TestMessagesSmiles() {
         // Логинимся первым ботом
-        UserPage p1 = login.loginMe(TestMessagesData.user1, TestMessagesData.password1);
+        FeedPage p1 = login.loginMe(TestMessagesData.user1, TestMessagesData.password1);
         // Переходим в "Сообщения" в Toolbar
         MessagePage msg1 = p1.getToolbars().goToMessage();
         // Получаем нужного адресата
@@ -41,7 +41,7 @@ public class TestMessages implements TestMessagesData {
 
 
         // Логинимся вторым ботом
-        UserPage p2 = login.loginMe(TestMessagesData.user2, TestMessagesData.password2);
+        FeedPage p2 = login.loginMe(TestMessagesData.user2, TestMessagesData.password2);
         // Переходим в "Сообщения" в Toolbar
         MessagePage msg2 = p2.getToolbars().goToMessage();
         // Получаем нужного адресата

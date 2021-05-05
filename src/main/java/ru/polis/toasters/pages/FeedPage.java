@@ -3,8 +3,7 @@ package ru.polis.toasters.pages;
 import ru.polis.toasters.elements.Toolbar;
 import ru.polis.toasters.elements.ToolbarRight;
 
-
-public class UserPage {
+public class FeedPage {
 
     private Toolbar toolbar = new Toolbar();
 

@@ -6,7 +6,7 @@ import ru.polis.toasters.data.TestFriendsData;
 import ru.polis.toasters.pages.AddFriendPage;
 import ru.polis.toasters.pages.FriendsPage;
 import ru.polis.toasters.pages.LoginPage;
-import ru.polis.toasters.pages.UserPage;
+import ru.polis.toasters.pages.FeedPage;
 import ru.polis.toasters.util.UserData;
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class TestAddFriends implements TestFriendsData {
     @org.junit.jupiter.api.Test
     public void TestFriendsAdd() {
         // Логинимся первым ботом
-        UserPage p1 = login.loginMe(user1.user, user1.password);
+        FeedPage p1 = login.loginMe(user1.user, user1.password);
         // Переходим в "Друзья" в Toolbar
         FriendsPage friend1 = p1.getToolbars().goToFriends();
         // Заходим на страницу добавления нового друга
@@ -46,7 +46,7 @@ public class TestAddFriends implements TestFriendsData {
 
 
         // Логинимся вторым ботом
-        UserPage p2 = login.loginMe(user2.user, user2.password);
+        FeedPage p2 = login.loginMe(user2.user, user2.password);
         // Переходим в "Друзья" в Toolbar
         FriendsPage friend2 = p2.getToolbars().goToFriends();
         // Переходим в раздел "Входящие заявки в друзья"
@@ -93,7 +93,7 @@ public class TestAddFriends implements TestFriendsData {
     // Проверяет, что заданные люди не в друзьях друг у друга
     public static void deleteIfFriends(UserData user1, UserData user2) {
         // Логинимся первым ботом
-        UserPage p1 = login.loginMe(user1.user, user1.password);
+        FeedPage p1 = login.loginMe(user1.user, user1.password);
         // Переходим в "Друзья" в Toolbar
         FriendsPage friend1 = p1.getToolbars().goToFriends();
         // Получаем список имен друзей
@@ -141,7 +141,7 @@ public class TestAddFriends implements TestFriendsData {
         // Выходим из профиля
         p1.getToolbarRight().exitWithCheck();
         // Логинимся вторым ботом
-        UserPage p2 = login.loginMe(user2.user, user2.password);
+        FeedPage p2 = login.loginMe(user2.user, user2.password);
         // Переходим в "Друзья" в Toolbar
         FriendsPage friend2 = p2.getToolbars().goToFriends();
         // Заходим в "Подписки"

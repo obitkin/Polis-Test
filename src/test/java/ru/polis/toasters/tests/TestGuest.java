@@ -9,7 +9,7 @@ import ru.polis.toasters.data.TestData;
 import ru.polis.toasters.elements.GuestCard;
 import ru.polis.toasters.pages.GuestPage;
 import ru.polis.toasters.pages.LoginPage;
-import ru.polis.toasters.pages.UserPage;
+import ru.polis.toasters.pages.FeedPage;
 import ru.polis.toasters.util.UserData;
 import java.time.LocalTime;
 import java.util.stream.Stream;
@@ -40,10 +40,10 @@ public class TestGuest implements TestData {
 
     public void clearData(UserData guest, UserData master) {
         loginPage = new LoginPage();
-        UserPage userPageMaster = loginPage.loginMe(master.user, master.password);
+        FeedPage feedPageMaster = loginPage.loginMe(master.user, master.password);
         //Кликаем на "Гостей" в туллбаре
         //При клике очищаются нотификации гостей
-        GuestPage guestPage = userPageMaster.getToolbars().goToGuest();
+        GuestPage guestPage = feedPageMaster.getToolbars().goToGuest();
         GuestCard guestCard;
         if ((guestCard = guestPage.getGuestBlock().getGuestCard(guest.userName)) != null) {
             //Удаляем гостя из списка гостей
@@ -69,22 +69,22 @@ public class TestGuest implements TestData {
 
         //Логинимся гостем
         loginPage = new LoginPage();
-        UserPage userPageGuest = loginPage.loginMe(guest.user, guest.password);
+        FeedPage feedPageGuest = loginPage.loginMe(guest.user, guest.password);
         //Посещяем страницу хозяина
         open(master.url);
         //Запоминаем время посещения
         LocalTime time = LocalTime.now();
         //Выходим из профиля
-        userPageGuest.getToolbarRight().exit();
+        feedPageGuest.getToolbarRight().exit();
         //Закрываем браузер
         closeWindow();
 
         //Логинимся хозяином
         loginPage = new LoginPage();
-        UserPage userPageMaster = loginPage.loginMe(master.user, master.password);
+        FeedPage feedPageMaster = loginPage.loginMe(master.user, master.password);
 
         //Кликаем на "Гостей" в туллбаре
-        GuestPage guestPage = userPageMaster.getToolbars().goToGuest();
+        GuestPage guestPage = feedPageMaster.getToolbars().goToGuest();
 
         //Получаем карту гостя с нужным именем(если нету то тест падает)
         GuestCard guestCard;
@@ -107,20 +107,20 @@ public class TestGuest implements TestData {
 
         //Логинимся гостем
         loginPage = new LoginPage();
-        UserPage userPageGuest = loginPage.loginMe(guest.user, guest.password);
+        FeedPage feedPageGuest = loginPage.loginMe(guest.user, guest.password);
         //Посещяем страницу хозяина
         open(master.url);
         //Выходим из профиля
-        userPageGuest.getToolbarRight().exit();
+        feedPageGuest.getToolbarRight().exit();
         //Закрываем браузер
         closeWindow();
 
         //Логинимся хозяином
         loginPage = new LoginPage();
-        UserPage userPageMaster = loginPage.loginMe(master.user, master.password);
+        FeedPage feedPageMaster = loginPage.loginMe(master.user, master.password);
 
         //Проверяем что есть хотя бы 1 новый гость
-        Assertions.assertTrue(userPageMaster.getToolbars().getGuestCounter() > 0);
+        Assertions.assertTrue(feedPageMaster.getToolbars().getGuestCounter() > 0);
     }
 
     @AfterEach

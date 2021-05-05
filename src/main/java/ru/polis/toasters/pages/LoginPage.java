@@ -31,10 +31,10 @@ public class LoginPage {
         return enter;
     }
 
-    public UserPage loginMe(String login, String password) {
+    public FeedPage loginMe(String login, String password) {
         getLogin().setValue(login);
         getPassword().setValue(password);
         getEnter().click();
-        return new UserPage();
+        return new FeedPage();
     }
 }
