@@ -79,7 +79,7 @@ public class FriendsPage {
 
     // Ожидание загрузки вкладки "Входящие заявки в друзья"
     public void waitAccept() {
-        String waitAccept = ".//div[contains(text(), 'Входящие заявки в друзья')]";
+        String waitAccept = ".//div[contains(text(), 'Заявки в друзья')]";
         $(byXpath(waitAccept)).shouldBe(Condition.appear, Duration.ofSeconds(10));
     }
 
