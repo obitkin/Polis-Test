@@ -1,8 +1,7 @@
 package ru.polis.toasters.tests;
 
 import com.codeborne.selenide.WebDriverRunner;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -12,15 +11,10 @@ import ru.polis.toasters.pages.GuestPage;
 import ru.polis.toasters.pages.LoginPage;
 import ru.polis.toasters.pages.UserPage;
 import ru.polis.toasters.util.UserData;
-
 import java.time.LocalTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.Selenide.*;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 
@@ -28,29 +22,50 @@ public class TestGuest implements TestData {
 
     LoginPage loginPage;
 
-    UserData guest;
-    UserData master;
+    static UserData userFirst;
+    static UserData userSecond;
 
-    static Stream<Arguments> data() {
-        UserData userFirst = new UserData(user1, userName1, password1, url1);
-        UserData userSecond = new UserData(user2, userName2, password2, url2);
+    static Stream<Arguments> guestAndMasterData() {
         return Stream.of(
                 arguments(userFirst, userSecond),
                 arguments(userSecond, userFirst)
         );
     }
 
+    @BeforeAll
+    static void setUP() {
+        userFirst = new UserData(user1, userName1, password1, url1);
+        userSecond = new UserData(user2, userName2, password2, url2);
+    }
+
+    public void clearData(UserData guest, UserData master) {
+        loginPage = new LoginPage();
+        UserPage userPageMaster = loginPage.loginMe(master.user, master.password);
+        //Кликаем на "Гостей" в туллбаре
+        //При клике очищаются нотификации гостей
+        GuestPage guestPage = userPageMaster.getToolbars().goToGuest();
+        GuestCard guestCard;
+        if ((guestCard = guestPage.getGuestBlock().getGuestCard(guest.userName)) != null) {
+            //Удаляем гостя из списка гостей
+            guestCard.removeFromGuests();
+        }
+        //Выходим из профиля
+        guestPage.getToolbarRight().exit();
+        closeWindow();
+    }
+
     /**
      * Тест проверяет что при посещении страницы одним пользователем:
      * этот пользователь отображается как гость +
-     * время посещения совпадает с измеренным +
-     * присутствует уведомление о новых гостях в туллбаре
+     * время посещения совпадает с измеренным
      */
     @ParameterizedTest
-    @MethodSource("data")
-    public void TestGuest(UserData guest, UserData master) {
-        this.guest = guest;
-        this.master = master;
+    @MethodSource("guestAndMasterData")
+    public void GuestDisplayedInGuestListAndHaveProperTimeTest(UserData guest, UserData master) {
+        //Вызов через BeforeEach невозможен, так как в методе BeforeEach
+        //невозможно получить текущий guest и master из data
+        //а переносить очистку данных после теста не очень хорошо
+        clearData(guest, master);
 
         //Логинимся гостем
         loginPage = new LoginPage();
@@ -81,21 +96,20 @@ public class TestGuest implements TestData {
         int guestMinute = guestTime.getHour() * 60 + guestTime.getMinute();
         int timeMinute = time.getHour() * 60 + time.getMinute();
         int minuteDiff = Math.abs(guestMinute - timeMinute);
-        Assertions.assertTrue(minuteDiff <= 10);
+        int diff = 10;
+        Assertions.assertTrue(minuteDiff <= diff || minuteDiff >= 24 * 60 - diff);
     }
 
     @ParameterizedTest
-    @MethodSource("data")
-    public void TestNotification(UserData guest, UserData master) {
-        this.guest = guest;
-        this.master = master;
+    @MethodSource("guestAndMasterData")
+    public void GuestNotificationAtLeastOneAfterVisitTest(UserData guest, UserData master) {
+        clearData(guest, master);
+
         //Логинимся гостем
         loginPage = new LoginPage();
         UserPage userPageGuest = loginPage.loginMe(guest.user, guest.password);
         //Посещяем страницу хозяина
         open(master.url);
-        //Запоминаем время посещения
-        LocalTime time = LocalTime.now();
         //Выходим из профиля
         userPageGuest.getToolbarRight().exit();
         //Закрываем браузер
@@ -110,26 +124,12 @@ public class TestGuest implements TestData {
     }
 
     @AfterEach
-    public void tearDown() {
-        closeWindow();
-        //Логинимся хозяином
-        loginPage = new LoginPage();
-        UserPage userPageMaster = loginPage.loginMe(master.user, master.password);
-        //Кликаем на "Гостей" в туллбаре
-        GuestPage guestPage = userPageMaster.getToolbars().goToGuest();
-        //Получаем карту гостя с нужным именем(если нету то тест падает)
-        GuestCard guestCard;
-        if ((guestCard = guestPage.getGuestBlock().getGuestCard(guest.userName)) != null) {
-            //Удаляем гостя из списка гостей
-            guestCard.removeFromGuests();
-        }
-        //Выходим из профиля
-        guestPage.getToolbarRight().exit();
+    void close() {
         closeWindow();
     }
 
-    @org.junit.jupiter.api.AfterAll
-    public static void Stop() {
+    @AfterAll
+    public static void stop() {
         WebDriverRunner.closeWebDriver();
     }
 }
