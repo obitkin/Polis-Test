@@ -1,7 +1,11 @@
 package ru.polis.toasters.tests;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.Step;
+import io.qameta.allure.selenide.AllureSelenide;
 import ru.polis.toasters.data.TestFriendsData;
 import ru.polis.toasters.pages.AddFriendPage;
 import ru.polis.toasters.pages.FriendsPage;
@@ -18,8 +22,12 @@ public class TestAddFriends implements TestFriendsData {
     static UserData user1;
     static UserData user2;
 
+    @Step("Открытие страницы логина и создание загрузка данных пользователей")
     @org.junit.jupiter.api.BeforeAll
     public static void Start() {
+        Configuration.headless = true;
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+
         login = new LoginPage();
         user1 = new UserData(TestFriendsData.user1, TestFriendsData.userID1, TestFriendsData.password1);
         user2 = new UserData(TestFriendsData.user2, TestFriendsData.userID2, TestFriendsData.password2);
@@ -31,6 +39,7 @@ public class TestAddFriends implements TestFriendsData {
     }
 
     // Тест на добавление друга
+    @Step("Добавление в друзья")
     @org.junit.jupiter.api.Test
     public void TestFriendsAdd() {
         // Логинимся первым ботом
@@ -84,6 +93,7 @@ public class TestAddFriends implements TestFriendsData {
         deleteIfFriends(user1, user2);
     }
 
+    @Step("Закрываем браузер")
     @org.junit.jupiter.api.AfterAll
     public static void Stop() {
         closeWindow();
@@ -91,6 +101,7 @@ public class TestAddFriends implements TestFriendsData {
     }
 
     // Проверяет, что заданные люди не в друзьях друг у друга
+    @Step("Удаление {user1.userName} из друзей {user2.userName} если друзья")
     public static void deleteIfFriends(UserData user1, UserData user2) {
         // Логинимся первым ботом
         FeedPage p1 = login.loginMe(user1.user, user1.password);

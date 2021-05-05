@@ -1,6 +1,9 @@
 package ru.polis.toasters.tests;
 
 import com.codeborne.selenide.*;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.Step;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.Assertions;
 import ru.polis.toasters.data.TestMessagesData;
 import ru.polis.toasters.pages.LoginPage;
@@ -14,12 +17,17 @@ import static com.codeborne.selenide.Selenide.closeWindow;
 public class TestMessages implements TestMessagesData {
     static LoginPage login;
 
+    @Step("Открытие страницы логина")
     @org.junit.jupiter.api.BeforeAll
     public static void Start() {
+        Configuration.headless = true;
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+
         login = new LoginPage();
     }
 
     // Тест на отправку и прием смайликов в беседе
+    @Step("Пишем сообщение из смайлов")
     @org.junit.jupiter.api.Test
     public void TestMessagesSmiles() {
         // Логинимся первым ботом
@@ -59,6 +67,7 @@ public class TestMessages implements TestMessagesData {
         p2.getToolbarRight().exitWithCheck();
     }
 
+    @Step("Закрываем браузер")
     @org.junit.jupiter.api.AfterAll
     public static void Stop() {
         closeWindow();

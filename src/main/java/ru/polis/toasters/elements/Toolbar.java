@@ -1,6 +1,7 @@
 package ru.polis.toasters.elements;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import ru.polis.toasters.pages.FriendsPage;
 import ru.polis.toasters.pages.GuestPage;
@@ -27,12 +28,14 @@ public class Toolbar {
         return root;
     }
 
+    @Step("Переходим на страницу Гостей")
     public GuestPage goToGuest() {
         guests.click();
         return new GuestPage();
     }
 
     // Функция поиска кнопки "Сообщения" в Toolbar-е
+    @Step("Переходим на страницу сообщения")
     public MessagePage goToMessage() {
         message.click();
         return new MessagePage();
@@ -44,6 +47,7 @@ public class Toolbar {
     }
 
     // Функция поиска кнопки "Друзья" в Toolbar-е
+    @Step("Переходим на страницу Друзей")
     public FriendsPage goToFriends() {
         friends.click();
         return new FriendsPage();

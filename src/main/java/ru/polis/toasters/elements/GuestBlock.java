@@ -2,6 +2,8 @@ package ru.polis.toasters.elements;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
+
 import java.util.ArrayList;
 import java.util.List;
 import static com.codeborne.selenide.Selectors.byXpath;
@@ -17,6 +19,7 @@ public class GuestBlock {
         return root;
     }
 
+    @Step("Получаем коллекцию карт гостей")
     public List<GuestCard> getGuestCards() {
         List<GuestCard> res = new ArrayList<>();
         for (SelenideElement s : guestCards) {
@@ -25,6 +28,7 @@ public class GuestBlock {
         return res;
     }
 
+    @Step("Получаем карту гостя с именем: {name}")
     public GuestCard getGuestCard(String name) {
         for (GuestCard g : getGuestCards()) {
             if (g.getName().equals(name)) {

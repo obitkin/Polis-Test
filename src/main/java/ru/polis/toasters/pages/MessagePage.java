@@ -2,6 +2,8 @@ package ru.polis.toasters.pages;
 
 import com.codeborne.selenide.*;
 import io.github.sukgu.*;
+import io.qameta.allure.Step;
+
 import java.time.Duration;
 import java.util.List;
 
@@ -16,12 +18,14 @@ public class MessagePage {
     }
 
     // Функция ожидания загрузки вкладки "Сообщения"
+    @Step("Ожидаем загрузки вкладки \"Сообщения\"")
     public void waitMessages() {
         String messageLayer = ".//div[@id='msg_layer']";
         $(byXpath(messageLayer)).shouldBe(Condition.appear, Duration.ofSeconds(10));
     }
 
     // Функция поиска кнопки отправки смайликов
+    @Step("Отправляем смайлики")
     public void smileButtonClick() {
         String smileMessageButton = ".//msg-button[@title='Смайлики']";
         Shadow shadow = new Shadow(WebDriverRunner.getWebDriver());
@@ -29,6 +33,7 @@ public class MessagePage {
     }
 
     // Функция поиска вкладки "Смайлики"
+    @Step("Ищем вкладку смайлики")
     public void smileLableClick() {
         String smileLableButton = "//msg-l10n[text()='Смайлики']";
         Shadow shadow = new Shadow(WebDriverRunner.getWebDriver());
@@ -36,6 +41,7 @@ public class MessagePage {
     }
 
     // Функция поиска кнопки "Отправить сообщение"
+    @Step("Ищем кнопки \"Отправить сообщение\"")
     public void sendMessageClick() {
         String sendSmilesButton = "//msg-button[@title='Отправить']";
         Shadow shadow = new Shadow(WebDriverRunner.getWebDriver());
@@ -49,6 +55,7 @@ public class MessagePage {
     }
 
     // Функция открытия заданного диалога по адресату
+    @Step("Открываем диалог с {name}")
     public void openUserDialog(String name) {
         String dialogs = ".//msg-chats-list-item";
         List<SelenideElement> myDialogs1 = getWebElementsFromShadowDom(dialogs);
@@ -63,6 +70,7 @@ public class MessagePage {
     }
 
     // Функция ввода заданного смайлика заданное количество раз
+    @Step("Вводим смайлик {smile} - {cnt} раз")
     public void getSmileAndClick(String smile, int cnt) {
         String emojiIcons = ".//section[@class='first']//img[@data-tsid='emoji']";
         List<SelenideElement> allEmojiIcons = getWebElementsFromShadowDom(emojiIcons);
@@ -79,6 +87,7 @@ public class MessagePage {
     }
 
     // Функция получения всех элементов последнего сообщения в диалоге
+    @Step("Получаем последнее сообщение диалога")
     public List<SelenideElement> getLastMessageElements() {
         String getMessages = ".//msg-parsed-text[@class='text']";
         List<SelenideElement> messages = getWebElementsFromShadowDom(getMessages);

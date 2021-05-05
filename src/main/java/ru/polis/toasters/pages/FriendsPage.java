@@ -2,6 +2,8 @@ package ru.polis.toasters.pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
+
 import java.time.Duration;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class FriendsPage {
     }
 
     // Выполняет переход на страницу "Добавить друга"
+    @Step("Выполняем переход на страницу \"Добавить друга\"")
     public AddFriendPage goToFriendsAdd() {
         String friendAddLocator = ".//a[@title='Найти по имени и фамилии']";
         $(byXpath(friendAddLocator)).click();
@@ -24,12 +27,14 @@ public class FriendsPage {
     }
 
     // Ищет вкладку "Входящие запросы в друзья"
+    @Step("Ищем вкладку \"Входящие запросы в друзья\"")
     public void goToFriendRequests() {
         String friendsRequests = ".//div[contains(text(),'Заявки в друзья')]//..";
         $(byXpath(friendsRequests)).click();
     }
 
     // Ищет кнопку "Принять заявку в друзья"
+    @Step("Ищем кнопку \"Принять заявку в друзья\"")
     public void acceptClick() {
         String acceptBut = ".//span[text()='Принять' and contains(@class, 'accept')]";
         if ($(byXpath(acceptBut)).exists()) {
@@ -38,6 +43,7 @@ public class FriendsPage {
     }
 
     // Ищет кнопку "Скрыть заявку в друзья"
+    @Step("Ищем кнопку \"Скрыть заявку в друзья\"")
     public void declineClick() {
         String declineBut = ".//span[text()='Скрыть' and contains(@class, 'decline')]";
         if ($(byXpath(declineBut)).exists()) {
@@ -46,12 +52,14 @@ public class FriendsPage {
     }
 
     // Ищет всех друзей данного пользователя
+    @Step("Ищем всех друзей данного пользователя")
     public List<SelenideElement> findFriends() {
         String friendsCards = ".//a[@class='n-t bold']";
         return $$(byXpath(friendsCards));
     }
 
     // Ищет друга в коллекции друзей
+    @Step("Ищем друга {user} в коллекции друзей")
     public int findFriend(List<SelenideElement> friends, String user) {
         int cnt = 0;
         for (SelenideElement friend : friends) {
@@ -65,6 +73,7 @@ public class FriendsPage {
     }
 
     // Клик по кнопке с дополнительной информацией
+    @Step("Кликаем по кнопке с дополнительной информацией")
     public void clickAddInfo() {
         String additionalInfoFriend = ".//span[@class='u-menu_a toggle-dropdown']//*[contains(@class, 'more')]";
         SelenideElement additionalFriendInfo = $(byXpath(additionalInfoFriend)).shouldBe(Condition.appear, Duration.ofSeconds(10));
@@ -72,30 +81,35 @@ public class FriendsPage {
     }
 
     // Ищет вкладку "Подписки"
+    @Step("Ищем вкладку \"Подписки\"")
     public void goToFriendSubscriptions() {
         String friendsSubs = ".//a[contains(@href, 'subscriptions')]";
         $(byXpath(friendsSubs)).click();
     }
 
-    // Ожидание загрузки вкладки "Входящие заявки в друзья"
+    // Ожидание загрузки вкладки "Заявки в друзья"
+    @Step("Ожидаем загрузки вкладки \"Входящие заявки в друзья\"")
     public void waitAccept() {
         String waitAccept = ".//div[contains(text(), 'Заявки в друзья')]";
         $(byXpath(waitAccept)).shouldBe(Condition.appear, Duration.ofSeconds(10));
     }
 
     // Ожидание загрузки вкладки "Друзья"
+    @Step("Ожидаем загрузки вкладки \"Друзья\"")
     public void waitFriends() {
         String waitFriends = ".//div[@id='hook_Block_MyFriendsMRB']";
         $(byXpath(waitFriends)).shouldBe(Condition.appear, Duration.ofSeconds(10));
     }
 
     // Ожидание загрузки вкладки "Мои подписки"
+    @Step("Ожидаем загрузки вкладки \"Мои подписки\"")
     public void waitSubs() {
         String waitSubs = ".//div[text()='Мои подписки']";
         $(byXpath(waitSubs)).shouldBe(Condition.appear, Duration.ofSeconds(10));
     }
 
     // Удаление друга
+    @Step("Удаляем друга")
     public void clickDeleteFriend() {
         String deleteFriend = ".//li[@class='u-menu_li  __custom']//a[text()='Удалить из друзей']";
         $(byXpath(deleteFriend)).click();
@@ -106,18 +120,21 @@ public class FriendsPage {
     }
 
     // Удаляет подписчика
+    @Step("Удаляем подписчика")
     public void clickDeleteSub() {
         String unsubscribe = ".//a[text()='Отписаться' and contains(@class, 'lvl2')]";
         $(byXpath(unsubscribe)).click();
     }
 
     // Получает всех подписчиков пользователя
+    @Step("Получаем всех подписчиков пользователя")
     public List<SelenideElement> getSubs() {
         String allSubs = ".//a[@class='n-t bold']";
         return $$(byXpath(allSubs));
     }
 
     // Получает количество совпадений имени друга со всеми друзьями
+    @Step("Получаем количество совпадений имени друга: {user} со всеми друзьями")
     public int countFriend(List<SelenideElement> friends, String user) {
         int cnt = 0;
         for (SelenideElement friend : friends) {
@@ -129,6 +146,7 @@ public class FriendsPage {
     }
 
     // Получает выбранного подписчика пользователя из списка подписчиков пользователя
+    @Step("Получаем выбранного подписчика пользователя с именем: {name} из списка подписчиков пользователя")
     public int getSub(List<SelenideElement> mySubs, String name) {
         int cnt = 0;
         for (SelenideElement mySub : mySubs) {
@@ -142,6 +160,7 @@ public class FriendsPage {
     }
 
     // Проверяет, существуют ли подписчики у пользователя
+    @Step("Проверяем, существуют ли подписчики у пользователя")
     public boolean subsExist() {
         String subsBlock = ".//div[@id='hook_Block_UserFriendRequestMRB']";
         $(byXpath(subsBlock)).shouldBe(Condition.appear, Duration.ofSeconds(10));

@@ -1,6 +1,7 @@
 package ru.polis.toasters.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -31,6 +32,7 @@ public class LoginPage {
         return enter;
     }
 
+    @Step("Логинимся Логин: {login} Пароль {password}")
     public FeedPage loginMe(String login, String password) {
         getLogin().setValue(login);
         getPassword().setValue(password);
